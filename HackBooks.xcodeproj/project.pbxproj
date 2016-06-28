@@ -14,6 +14,7 @@
 		E3B91FAE1D22728A004B7510 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E3B91FAC1D22728A004B7510 /* LaunchScreen.storyboard */; };
 		E3B91FB91D22728A004B7510 /* HackBooksTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B91FB81D22728A004B7510 /* HackBooksTests.swift */; };
 		E3B91FC41D22728A004B7510 /* HackBooksUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B91FC31D22728A004B7510 /* HackBooksUITests.swift */; };
+		E3B91FD21D227719004B7510 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = E3B91FD11D227719004B7510 /* .gitignore */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,7 @@
 		E3B91FBF1D22728A004B7510 /* HackBooksUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HackBooksUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E3B91FC31D22728A004B7510 /* HackBooksUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HackBooksUITests.swift; sourceTree = "<group>"; };
 		E3B91FC51D22728A004B7510 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E3B91FD11D227719004B7510 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +79,7 @@
 		E3B91F971D22728A004B7510 = {
 			isa = PBXGroup;
 			children = (
+				E3B91FD11D227719004B7510 /* .gitignore */,
 				E3B91FA21D22728A004B7510 /* HackBooks */,
 				E3B91FB71D22728A004B7510 /* HackBooksTests */,
 				E3B91FC21D22728A004B7510 /* HackBooksUITests */,
@@ -229,6 +232,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E3B91FD21D227719004B7510 /* .gitignore in Resources */,
 				E3B91FAE1D22728A004B7510 /* LaunchScreen.storyboard in Resources */,
 				E3B91FAB1D22728A004B7510 /* Assets.xcassets in Resources */,
 				E3B91FA91D22728A004B7510 /* Main.storyboard in Resources */,

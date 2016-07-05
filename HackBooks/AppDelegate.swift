@@ -16,7 +16,88 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
-        return true
+ /*
+        let pdf = NSURL(string: "https://vis.renci.org/jeff/wp-content/uploads/2009/01/beautifulcode.pdf")
+        let imagen = NSURL(string: "http://hackershelf.com/media/cache/2a/53/2a533240e22f1c70719fde0edbf85a7f.jpg")
+        let model = Book(title: "Planning Algorithms", authors: ["Steven M."], tags: ["machine learning", "optimization"], image: imagen! , url: pdf!)
+ 
+        window = UIWindow(frame: UIScreen.mainScreen().bounds)
+        let vc = BookViewController(model: model)
+        let nav = UINavigationController(rootViewController: vc)
+        window?.rootViewController = nav
+        window?.makeKeyAndVisible()
+        
+ */
+/*
+        let fm = NSFileManager.defaultManager()
+        let cacheDirectory = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)[0] as String
+        */
+        
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let urlData: NSData
+        
+        if let jsonData = defaults.dataForKey("json") {
+            urlData = jsonData
+        } else {
+            let url = NSURL(string: "https://t.co/K9ziV0z3SJ")
+            urlData = NSData(contentsOfURL: url!)!
+            defaults.setObject(urlData, forKey: "json")
+        }
+
+        
+        
+        do{
+            let json : [AnyObject] = try NSJSONSerialization.JSONObjectWithData(urlData, options: []) as! [AnyObject]
+            print (json)
+            
+            var books = [Book]()
+            for dict in json{
+                do{
+                    let book = try decode(book: dict as! JSONDictionary)
+                    books.append(book)
+                }catch{
+                    print("Error al procesar \(dict)")
+                }
+            }
+            
+            
+            
+            window = UIWindow(frame: UIScreen.mainScreen().bounds)
+            //Podemos crear el modelo
+            let model = Library(allBooks: books)
+            
+            //Crear un VC
+            let lVC = LibraryViewController(model:model)
+            
+            // Lo metemos en un nav
+            let lNav = UINavigationController(rootViewController: lVC)
+            
+            //Creamos un BookVC
+            let bookVC = BookViewController(model: model.bookAtIndex(0)!)
+            
+            //Lo metemos en otro Navigation
+            let bookNav = UINavigationController(rootViewController: bookVC)
+            
+            //Creamos un SplitView
+            let splitVC = UISplitViewController()
+            splitVC.viewControllers = [lNav, bookNav]
+ 
+            //Nav como root View controller
+            window?.rootViewController = splitVC
+            
+            //Asignamos delegados
+            lVC.delegate = bookVC
+ 
+            //hacer visible & key a la window
+            window?.makeKeyAndVisible()
+ 
+            return true
+      
+        }catch{
+            fatalError("Error while loading JSON")
+        }
+
+ 
     }
 
     func applicationWillResignActive(application: UIApplication) {

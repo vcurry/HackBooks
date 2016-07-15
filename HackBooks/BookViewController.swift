@@ -8,6 +8,7 @@
 
 import UIKit
 
+
 class BookViewController: UIViewController {
 
     var model : Book
@@ -32,12 +33,21 @@ class BookViewController: UIViewController {
         let pdfVC = PdfViewController(model: model)
         navigationController?.pushViewController(pdfVC, animated: true)
     }
+
+    @IBAction func isFavorito(sender: AnyObject) {
+     
+        self.model.isFavoriteBook()
+
+    }
+    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         syncModelWithView()
     }
+    
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+        
         
     }
     
@@ -45,8 +55,24 @@ class BookViewController: UIViewController {
         titleLabel.text = model.title
         authorsLabel.text = model.authors.componentsJoinedByString(" - ")
         tagsLabel.text = model.tags.componentsJoinedByString(", ")
-        imagen.image = UIImage(data: NSData(contentsOfURL: model.image)!)
         
+        let fileManager = NSFileManager.defaultManager()
+        let diskPaths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.CachesDirectory,
+                                                            NSSearchPathDomainMask.UserDomainMask,
+                                                            true)
+        let cacheDirectory = NSURL(string: diskPaths[0] as String)
+        let fileName = model.image.lastPathComponent
+        let diskPath = cacheDirectory?.URLByAppendingPathComponent(fileName!)
+        
+        if fileManager.fileExistsAtPath("\(diskPath!)"){
+            imagen.image = UIImage(data: NSData(contentsOfFile: "\(diskPath!)")!)
+        } else {
+            let imageData = NSData(contentsOfURL: model.image)!
+            imagen.image = UIImage(data: imageData)
+            imageData.writeToFile("\(diskPath!)", atomically: true)
+            print(diskPath)
+            imagen.image = UIImage(data: imageData)
+        }
     }
 }
 

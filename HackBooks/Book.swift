@@ -9,6 +9,9 @@
 import Foundation
 import UIKit
 
+let BookMarkedFavorite = "Book selected as Favorite"
+let BkKey = "key"
+
 class Book: Comparable{
     //MARK: - Computed - Stored properties
     let title : String
@@ -16,6 +19,7 @@ class Book: Comparable{
     let tags : NSArray
     let image : NSURL
     let url : NSURL
+    var isFavorite : Bool
     
     //MARK: - Initialization
     init(title: String, authors: NSArray, tags: NSArray, image: NSURL, url: NSURL){
@@ -24,6 +28,7 @@ class Book: Comparable{
         self.tags = tags
         self.image = image
         self.url = url
+        self.isFavorite = false
     }
     
     //MARK: - Proxies
@@ -38,6 +43,14 @@ class Book: Comparable{
         get{
             return proxyForComparison
         }
+    }
+    
+    func isFavoriteBook(){
+        self.isFavorite = !self.isFavorite
+       // print(self.model.isFavorite)
+        let nc = NSNotificationCenter.defaultCenter()
+        let notif = NSNotification(name: BookMarkedFavorite, object: self, userInfo: [BkKey: self])
+        nc.postNotification(notif)
     }
 
 }

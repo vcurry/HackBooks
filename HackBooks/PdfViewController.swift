@@ -27,7 +27,24 @@ class PdfViewController: UIViewController, UIWebViewDelegate {
     func syncModelWithView(){
         pdfView.delegate = self
         activityView.startAnimating()
-        pdfView.loadRequest(NSURLRequest(URL: model.url))
+
+        
+        let fileManager = NSFileManager.defaultManager()
+        let diskPaths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.CachesDirectory,
+                                                            NSSearchPathDomainMask.UserDomainMask,
+                                                            true)
+        let cacheDirectory = NSURL(string: diskPaths[0] as String)
+        let fileName = model.url.lastPathComponent
+        let diskPath = cacheDirectory?.URLByAppendingPathComponent(fileName!)
+        
+        if fileManager.fileExistsAtPath("\(diskPath!)"){
+            let pdfData = NSData(contentsOfFile: "\(diskPath!)")
+            pdfView.loadData(pdfData!, MIMEType: "application/pdf", textEncodingName: "", baseURL: diskPath!)
+        } else {
+            let pdfData = NSData(contentsOfURL: model.url)!
+            pdfData.writeToFile("\(diskPath!)", atomically: true)
+            pdfView.loadRequest(NSURLRequest(URL: model.url))
+        }
     }
     
     override func viewDidLoad() {

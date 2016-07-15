@@ -16,22 +16,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
- /*
-        let pdf = NSURL(string: "https://vis.renci.org/jeff/wp-content/uploads/2009/01/beautifulcode.pdf")
-        let imagen = NSURL(string: "http://hackershelf.com/media/cache/2a/53/2a533240e22f1c70719fde0edbf85a7f.jpg")
-        let model = Book(title: "Planning Algorithms", authors: ["Steven M."], tags: ["machine learning", "optimization"], image: imagen! , url: pdf!)
- 
-        window = UIWindow(frame: UIScreen.mainScreen().bounds)
-        let vc = BookViewController(model: model)
-        let nav = UINavigationController(rootViewController: vc)
-        window?.rootViewController = nav
-        window?.makeKeyAndVisible()
-        
- */
-/*
-        let fm = NSFileManager.defaultManager()
-        let cacheDirectory = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)[0] as String
-        */
         
         let defaults = NSUserDefaults.standardUserDefaults()
         let urlData: NSData
@@ -48,7 +32,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         do{
             let json : [AnyObject] = try NSJSONSerialization.JSONObjectWithData(urlData, options: []) as! [AnyObject]
-            print (json)
             
             var books = [Book]()
             for dict in json{
@@ -70,23 +53,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let lVC = LibraryViewController(model:model)
             
             // Lo metemos en un nav
-            let lNav = UINavigationController(rootViewController: lVC)
+            let lNav = SegmentViewController(rootViewController: lVC)
+            
             
             //Creamos un BookVC
             let bookVC = BookViewController(model: model.bookAtIndex(0)!)
+
             
             //Lo metemos en otro Navigation
             let bookNav = UINavigationController(rootViewController: bookVC)
+            
+            //Asignamos delegados
+            lVC.delegate = bookVC
             
             //Creamos un SplitView
             let splitVC = UISplitViewController()
             splitVC.viewControllers = [lNav, bookNav]
  
-            //Nav como root View controller
-            window?.rootViewController = splitVC
+            if(UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Phone){
+                window?.rootViewController = lNav
+            } else {
+                window?.rootViewController = splitVC
+            }
             
-            //Asignamos delegados
-            lVC.delegate = bookVC
+            
+            //Nav como root View controller
+            //window?.rootViewController = splitVC
+            
  
             //hacer visible & key a la window
             window?.makeKeyAndVisible()

@@ -13,8 +13,6 @@ class Library {
     typealias BookArray = [Book]
     typealias LibraryDictionary = [String: BookArray]
     
- //   var books: BooksArray
-    
     var tags = [Tag]()
     var books = [Book]()
     
@@ -52,7 +50,6 @@ class Library {
         let defaults = NSUserDefaults.standardUserDefaults()
         if let favBooks = defaults.objectForKey("diccionario"){
             favBooksArray = favBooks as! Array<Int>
-            print(favBooksArray)
             let favTag = Tag(name: "favorites")
             tags.insert(favTag, atIndex: 0)
             dict[favTag.name] = BookArray()
@@ -62,6 +59,7 @@ class Library {
                 dict[favTag.name]?.append(book)
             }
         }
+    
     }
 
     
@@ -106,6 +104,7 @@ class Library {
     func indexOfBook(tag: Tag, book: Book) -> Int {
         return (booksForTag(tag)?.indexOf(book))!
     }
+
     
     func addFavorite(book: Book){
         let favTag = Tag(name: "favorites")
@@ -133,7 +132,6 @@ class Library {
                 dict.removeValueForKey(favTag.name)
                 favBooksArray.removeAll()
                 tags.removeAtIndex(0)
-                print("borra")
             }
         }
         persistFavorite(favBooksArray)

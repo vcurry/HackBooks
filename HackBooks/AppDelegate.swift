@@ -71,7 +71,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             splitVC.viewControllers = [lNav, bookNav]
  
             if(UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Phone){
-                window?.rootViewController = lNav
+                window?.rootViewController = splitVC
             } else {
                 window?.rootViewController = splitVC
             }

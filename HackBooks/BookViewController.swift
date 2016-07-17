@@ -37,6 +37,7 @@ class BookViewController: UIViewController {
     @IBAction func isFavorito(sender: AnyObject) {
      
         self.model.isFavoriteBook()
+        
 
     }
     
@@ -55,24 +56,7 @@ class BookViewController: UIViewController {
         titleLabel.text = model.title
         authorsLabel.text = model.authors.componentsJoinedByString(" - ")
         tagsLabel.text = model.tags.componentsJoinedByString(", ")
-        
-        let fileManager = NSFileManager.defaultManager()
-        let diskPaths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.CachesDirectory,
-                                                            NSSearchPathDomainMask.UserDomainMask,
-                                                            true)
-        let cacheDirectory = NSURL(string: diskPaths[0] as String)
-        let fileName = model.image.lastPathComponent
-        let diskPath = cacheDirectory?.URLByAppendingPathComponent(fileName!)
-        
-        if fileManager.fileExistsAtPath("\(diskPath!)"){
-            imagen.image = UIImage(data: NSData(contentsOfFile: "\(diskPath!)")!)
-        } else {
-            let imageData = NSData(contentsOfURL: model.image)!
-            imagen.image = UIImage(data: imageData)
-            imageData.writeToFile("\(diskPath!)", atomically: true)
-            print(diskPath)
-            imagen.image = UIImage(data: imageData)
-        }
+        imagen.image = model.imagen
     }
 }
 

@@ -38,3 +38,4 @@ func decode(book json: JSONDictionary) throws -> Book{
         throw BookError.wrongJSONFormat
     }
 }
+

@@ -35,7 +35,6 @@ class LibraryViewController: UITableViewController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let bk = book(forIndexPath: indexPath)
         if(UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Phone){
-            print(bk)
             let bookVC = BookViewController(model: bk)
             self.navigationController?.pushViewController(bookVC, animated: true)
         }else{
@@ -64,7 +63,6 @@ class LibraryViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-       // let cellId = "BookCell"
         
         let bk : Book?
         
@@ -75,13 +73,9 @@ class LibraryViewController: UITableViewController {
         }
         let cell : CellTableViewCell = tableView.dequeueReusableCellWithIdentifier(CellTableViewCell() .cellId as String) as! CellTableViewCell
         
-     /*   if cell == nil{
-            cell = UITableViewCell(style: .Subtitle, reuseIdentifier: cellId)
-        }*/
-        
         cell.title.text = bk?.title
         cell.authors.text = bk?.authors.componentsJoinedByString(", ")
-        cell.bookImage.image = downloadImage((bk?.image)!)
+        cell.bookImage.image = bk?.imagen
         return cell
     }
     
@@ -121,34 +115,10 @@ class LibraryViewController: UITableViewController {
         
     }
     
-    func downloadImage(imageURL: NSURL) -> UIImage{
-        var imagen: UIImage
-        let fileManager = NSFileManager.defaultManager()
-        let diskPaths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.CachesDirectory,
-                                                            NSSearchPathDomainMask.UserDomainMask,
-                                                            true)
-        let cacheDirectory = NSURL(string: diskPaths[0] as String)
-        let fileName = imageURL.lastPathComponent
-        let diskPath = cacheDirectory?.URLByAppendingPathComponent(fileName!)
-        
-        if fileManager.fileExistsAtPath("\(diskPath!)"){
-            imagen = UIImage(data: NSData(contentsOfFile: "\(diskPath!)")!)!
-        } else {
-            let imageData = NSData(contentsOfURL: imageURL)!
-            imagen = UIImage(data: imageData)!
-            imageData.writeToFile("\(diskPath!)", atomically: true)
-            print(diskPath)
-            imagen = UIImage(data: imageData)!
-        }
-        
-        return imagen
-
-    }
     
     func bookMarkedFavorite(notification: NSNotification){
         let info = notification.userInfo!
         let book = info[BkKey] as? Book
-        print(book)
         model.addFavorite(book!)
         segmentModel = model.tags
         self.tableView.reloadData()

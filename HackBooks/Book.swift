@@ -17,7 +17,7 @@ class Book: Comparable{
     let title : String
     let authors : NSArray
     let tags : NSArray
-    let image : NSURL
+    let imagen : UIImage
     let url : NSURL
     var isFavorite : Bool
     
@@ -26,11 +26,32 @@ class Book: Comparable{
         self.title = title
         self.authors = authors
         self.tags = tags
-        self.image = image
         self.url = url
         self.isFavorite = false
+        
+        var img: UIImage
+        let fileManager = NSFileManager.defaultManager()
+        let diskPaths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.CachesDirectory,
+                                                            NSSearchPathDomainMask.UserDomainMask,
+                                                            true)
+        let cacheDirectory = NSURL(string: diskPaths[0] as String)
+        let fileName = image.lastPathComponent
+        let diskPath = cacheDirectory?.URLByAppendingPathComponent(fileName!)
+        
+        if fileManager.fileExistsAtPath("\(diskPath!)"){
+            img = UIImage(data: NSData(contentsOfFile: "\(diskPath!)")!)!
+        } else {
+            let imageData = NSData(contentsOfURL: image)!
+            img = UIImage(data: imageData)!
+            imageData.writeToFile("\(diskPath!)", atomically: true)
+            img = UIImage(data: imageData)!
+        }
+        
+        imagen = img
+        
     }
-    
+
+
     //MARK: - Proxies
     var proxyForComparison : String {
         
@@ -47,7 +68,6 @@ class Book: Comparable{
     
     func isFavoriteBook(){
         self.isFavorite = !self.isFavorite
-       // print(self.model.isFavorite)
         let nc = NSNotificationCenter.defaultCenter()
         let notif = NSNotification(name: BookMarkedFavorite, object: self, userInfo: [BkKey: self])
         nc.postNotification(notif)
